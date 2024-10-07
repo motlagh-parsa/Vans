@@ -3,6 +3,7 @@ import './App.css';
 import Server from "./server";
 import {useEffect} from "react";
 import {Link, useLoaderData} from "react-router-dom";
+import {Alert} from "@mui/material";
 
 export function loader() {
     return 'this is pencil nok tiz'
@@ -11,6 +12,7 @@ export function loader() {
 function App() {
     const data = useLoaderData()
     console.log(data, 'data')
+
     return (
         <div className="home-container">
             <h1>You got the travel plans, we got the travel vans.</h1>

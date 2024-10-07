@@ -1,23 +1,29 @@
 import React from "react"
-import {Link, useOutletContext, useParams} from "react-router-dom"
+import {Link, useLoaderData, useOutletContext, useParams} from "react-router-dom"
 import {VanIntroduction} from "./VanIntroduction";
+import {getHostVans} from "../api";
 
+export function loader({params}){
+    console.log(params,'params')
+    return getHostVans(params.id.slice(1))
+}
 
 export const Details = () => {
 
-    const params = useParams()
-    const [currentVan, setCurrentVan] = React.useState(null)
+    // const param = useParams()
+    // const [currentVan, setCurrentVan] = React.useState(null)
+    const currentVan = useLoaderData()
 
-    React.useEffect(() => {
-        fetch(`/api/host/vans/${params.id.slice(1)}`)
-            .then(res => res.json())
-            .then(data => setCurrentVan(data.vans)
-            )
-    }, [])
+    // React.useEffect(() => {
+    //     fetch(`/api/host/vans/${params.id.slice(1)}`)
+    //         .then(res => res.json())
+    //         .then(data => setCurrentVan(data.vans)
+    //         )
+    // }, [])
 
-    if (!currentVan) {
-        return <h1>Loading...</h1>
-    }
+    // if (!currentVan) {
+    //     return <h1>Loading...</h1>
+    // }
 
 
 

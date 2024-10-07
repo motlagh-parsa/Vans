@@ -4,17 +4,17 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import AboutPage from "./van/AboutPage";
 import Vans, {loader as vansLoader} from "./van/Vans";
-import VanInfo from "./van/VanInfo";
+import VanInfo, {loader as vanInfoLoader} from "./van/VanInfo";
 import Header from "./routeLinks/Header";
 import App, {loader as homePageLoader} from "./App";
-import {Host} from "./host/Host";
+import Host, {HostLoader} from "./host/Host";
 import {Income} from "./host/Income";
 import {Reviews} from "./host/Reviews";
 import {Dashboard} from "./host/Dashboard";
 import Layout from "./routeLinks/Layout";
-import VansList from "./host/VansList";
+import VansList, {loader as vansListLoader} from "./host/VansList";
 import {VanIntroduction} from "./vanIntroduction/VanIntroduction";
-import {Details} from "./vanIntroduction/Details";
+import {Details, loader as DetailsLoader} from "./vanIntroduction/Details";
 import {Pricing} from "./vanIntroduction/Pricing";
 import {Photos} from "./vanIntroduction/Photos";
 import {HostVanInfo} from "./vanIntroduction/HostVanInfo";
@@ -25,10 +25,11 @@ import {
     createBrowserRouter,
     createRoutesFromElements,
     Routes,
-    Route
+    Route, redirect, Navigate, useNavigate, useNavigation
 } from 'react-router-dom'
 import VanError from "./error/VanError";
-import {LogIn} from "./logIn/LogIn";
+import {LogIn, loginLoader, action as logInAction} from "./logIn/LogIn";
+import {RequireAuth} from "./utils";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -37,7 +38,7 @@ const myRoute = createBrowserRouter(createRoutesFromElements(
         <Route index element={<App/>} loader={homePageLoader}/>
 
         <Route path={'vans'} element={<Vans/>} errorElement={<VanError/>} loader={vansLoader}/>
-        <Route path={'vans/:id'} element={<VanInfo/>}/>
+        <Route path={'vans/:id'} element={<VanInfo/>} loader={vanInfoLoader}/>
 
         <Route path={'about'} element={<AboutPage/>}/>
 
@@ -46,12 +47,15 @@ const myRoute = createBrowserRouter(createRoutesFromElements(
         {/*    <Route path={':id'} element={<VanInfo/>}/>*/}
         {/*</Route>*/}
 
-        <Route path={'host'} element={<Host/>}>
+        <Route path={'host'} element={<Host/>}
+               loader={HostLoader}
+            // errorElement={<Navigate to={'/login'}/>}
+        >
             <Route index element={<Dashboard/>}/>
             <Route path={'income'} element={<Income/>}/>
             <Route path={'reviews'} element={<Reviews/>}/>
-            <Route path={'vansList'} element={<VansList/>}/>
-            <Route path={'vansList/:id'} element={<Details/>}>
+            <Route path={'vansList'} element={<VansList/>} loader={vansListLoader}/>
+            <Route path={'vansList/:id'} element={<Details/>} loader={DetailsLoader}>
                 <Route index element={<HostVanInfo/>}/>
                 <Route path={'pricing'} element={<Pricing/>}/>
                 <Route path={'photos'} element={<Photos/>}/>
@@ -59,7 +63,7 @@ const myRoute = createBrowserRouter(createRoutesFromElements(
         </Route>
 
         <Route path={'*'} element={<NotFound/>}/>
-        <Route path={'logIn'} element={<LogIn/>}/>
+        <Route path={'login'} element={<LogIn/>} loader={loginLoader} action={logInAction}/>
     </Route>
 ))
 
